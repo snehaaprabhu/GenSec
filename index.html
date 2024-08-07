@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Password Generator</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .password-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .password-item {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            color: black; /* Set text color to black */
+        }
+
+        .password-item:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Generate a<br><span> Random Password</span></h1>
+    <div class="display">
+        <input type="text" id="password" placeholder="Password">
+        <img src="images/copy.png" onclick="copyPassword()">
+    </div>
+    <button onclick="createPasswords()"><img src="images/generate.png">Generate Passwords</button>
+    <div class="password-list" id="passwordList"></div>
+</div> 
+<script>
+    const passwordBox = document.getElementById("password");
+    const passwordList = document.getElementById("passwordList");
+    const length = 8;
+
+    const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const lowerCase = "abcdefghijklmnopqrstuvwxyz";
+    const number = "0123456789";
+    const symbol = "@#$%&*()_+~|}{[]><-/="; 
+
+    const allChars = upperCase + lowerCase + number + symbol;
+
+    function createPassword(){
+        let password = "";
+        password += upperCase[Math.floor(Math.random() * upperCase.length)];
+        password += lowerCase[Math.floor(Math.random() * lowerCase.length)];
+        password += number[Math.floor(Math.random() * number.length)];
+        password += symbol[Math.floor(Math.random() * symbol.length)];
+
+        while(length > password.length){
+            password += allChars[Math.floor(Math.random() * allChars.length)];
+        }
+        return password;
+    }
+
+    function createPasswords(){
+        passwordList.innerHTML = "";
+        for(let i = 0; i < 5; i++){
+            const password = createPassword();
+            const passwordItem = document.createElement("div");
+            passwordItem.className = "password-item";
+            passwordItem.textContent = password;
+            passwordItem.onclick = function(){
+                passwordBox.value = password;
+                copyPassword();
+            };
+            passwordList.appendChild(passwordItem);
+        }
+    }
+    
+    function copyPassword(){
+        passwordBox.select();
+        document.execCommand("copy");
+    }
+</script>
+</body>
+</html>
